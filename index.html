@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=7271aeed-6ae5-46a4-bb1e-71085eec111c&lang=ru_RU"
+        type="text/javascript">
+        </script>
+    <link href="./dist/output.css" rel="stylesheet">
+</head>
+
+<body>
+    <div>
+        <select name="entity">
+            <option value="0">Физическое лицо</option>
+            <option value="1">Юридическое лицо</option>
+        </select>
+    </div>
+
+
+    <div class="block m-3">
+        <label for="car_from">Машина из:</label>
+        <select name="car_from" id="car_from">
+            <option value="0">Севастополя</option>
+            <option value="1">Симферополя</option>
+        </select>
+    </div>
+    Перевозка
+    <div class="block">
+        <select name="car_mode" id="car_mode">
+            <option value="0">Внутри города(пригородные районы)</option>
+            <option value="1">Между городами</option>
+        </select>
+    </div>
+    <div class="block">
+        <label for="car_from"> В:</label>
+        <div name="toPosition">
+        </div>
+    </div>
+
+    <div id="map" style="width: 600px; height: 400px" class="hidden"></div>
+</body>
+
+<script src="./particles.js"></script>
+<script type="text/javascript">
+    let entity = undefined;
+    let car_mode = undefined;
+    let car_from = undefined;
+
+    let values = {
+        length: undefined,
+        duration: undefined,
+        points: undefined,
+    }
+
+    document.querySelector('select[name="entity"]').addEventListener('change', function () {
+        entity = document.querySelector('select[name="entity"]').value;
+        insertValues();
+    });
+
+    document.querySelector('select[name="car_mode"]').addEventListener('change', function () {
+        car_mode = document.querySelector('select[name="car_mode"]').value;
+        insertValues();
+    });
+
+    document.querySelector('select[name="car_from"]').addEventListener('change', function () {
+        car_from = document.querySelector('select[name="car_from"]').value;
+        insertValues();
+    });
+
+    function insertValues() {
+        function genTextHTML(obj) {
+            let text = '<select name="car_from" id="car_from">';
+            for (const [key, value] of Object.entries(obj)) {
+                text += String(`<option value=${value}>${key}</option>`);
+            }
+            text += '</select>';
+            return text;
+        }
+
+        if (entity != undefined && car_mode != undefined && car_from != undefined) {
+            if (entity == 0) {
+                if (car_mode == 0) {
+
+                    document.querySelector('div[name="toPosition"]').innerHTML = `
+                    <select name="car_from" id="car_from">
+                        <option value="Севастополь">Севастополь</option>
+                        <option value="Симферополь">Балаклава, Инкерман, Сахарная головка, Штурмовое, Черноречье, Хмельницкое</option>
+                        <option value="Ялта">Северная сторона</option>
+                        <option value="Любимовка">Любимовка</option>
+                        <option value="Орловка, Бельбек">Орловка, Бельбек</option>
+                        <option value="Кача">Кача</option>
+                        <option value="Андреевка">Андреевка</option>
+                        <option value="Верхнесадовое,Фронтовое">Верхнесадовое,Фронтовое</option>
+                        <option value="Терновка, Родное">Терновка, Родное</option>
+                        <option value="Гончарное, Резервное">Гончарное, Резервное</option>
+                        <option value="Орлиное">Орлиное</option>
+                        <option value="Передовое">Передовое</option>
+                        <option value="Ласпинская бухта - Батилиман">Ласпинская бухта - Батилиман</option>
+                    </select>`;
+                    console.log(document.querySelector('div[name="toPosition"]'));
+
+                    if (car_from == 0 && car_mode == 1)
+                        document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(); 
+                    console.log(document.querySelector('div[name="toPosition"]'));
+                }
+            }
+        }
+    }
+
+    function initMap(from, to) {
+        ymaps.ready(function () {
+            var myMap = new ymaps.Map('map', {
+                center: [45.2, 34.0],
+                zoom: 6,
+                controls: []
+            });
+
+            var searchControl = new ymaps.control.SearchControl({
+                options: {
+                    provider: 'yandex#search'
+                }
+            });
+
+            myMap.controls.add(searchControl);
+
+
+            var multiRoute = new ymaps.multiRouter.MultiRoute({
+                referencePoints: [from, to]
+            }, {
+                editorDrawOver: false,
+                editorMidPointsType: "way",
+                reverseGeocoding: false
+            });
+
+            multiRoute.editor.start({
+                addWayPoints: true,
+                removeWayPoints: true,
+                addMidPoints: true
+            });
+
+            multiRoute.events.add('update', function () {
+                if (multiRoute.getActiveRoute() != null) {
+
+                    var length = multiRoute.getActiveRoute().properties.get("distance");
+                    var duration = multiRoute.getActiveRoute().properties.get('duration');
+                    var points = multiRoute.getWayPoints().toArray();
+
+                    console.log(length);
+                    console.log(duration);
+                    console.log(points);
+                }
+            });
+
+            myMap.geoObjects.add(multiRoute);
+        });
+    }
+</script>
+
+</html>
