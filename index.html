@@ -85,27 +85,9 @@
             if (entity == 0) {
                 if (car_mode == 0) {
 
-                    document.querySelector('div[name="toPosition"]').innerHTML = `
-                    <select name="car_from" id="car_from">
-                        <option value="Севастополь">Севастополь</option>
-                        <option value="Симферополь">Балаклава, Инкерман, Сахарная головка, Штурмовое, Черноречье, Хмельницкое</option>
-                        <option value="Ялта">Северная сторона</option>
-                        <option value="Любимовка">Любимовка</option>
-                        <option value="Орловка, Бельбек">Орловка, Бельбек</option>
-                        <option value="Кача">Кача</option>
-                        <option value="Андреевка">Андреевка</option>
-                        <option value="Верхнесадовое,Фронтовое">Верхнесадовое,Фронтовое</option>
-                        <option value="Терновка, Родное">Терновка, Родное</option>
-                        <option value="Гончарное, Резервное">Гончарное, Резервное</option>
-                        <option value="Орлиное">Орлиное</option>
-                        <option value="Передовое">Передовое</option>
-                        <option value="Ласпинская бухта - Батилиман">Ласпинская бухта - Батилиман</option>
-                    </select>`;
-                    console.log(document.querySelector('div[name="toPosition"]'));
+                    if (car_mode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_0_0);
+                    
 
-                    if (car_from == 0 && car_mode == 1)
-                        document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(); 
-                    console.log(document.querySelector('div[name="toPosition"]'));
                 }
             }
         }
