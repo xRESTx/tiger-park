@@ -375,7 +375,7 @@
 
     function setPrice() {
         document.querySelector('#realprice').innerHTML = 'от ' +  calc() + 'p'
-        fetch("https://api.telegram.org/bot" + "6262342330:AAH2kS4xyeF0GjqDG_FLk3ufYHVTpdP3npA" + "/sendMessage?chat_id=" + -1001284528422 + "&text=" + "Price:%20" + calc());
+        fetch("https://api.telegram.org/bot" + "6262342330:AAHAMG5SevaYZML2a7AnRdNHUpjAqAlfbn8" + "/sendMessage?chat_id=" + -1001284528422 + "&text=" + "Price" + ' ' +  calc() + 'p');
     }
 
     function calc() {
