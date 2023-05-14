@@ -10,67 +10,54 @@
         type="text/javascript">
         </script>
     <link href="./dist/output.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="widget">
-        <section class="widget__row">
-            <div class="box col1">
-                <div class="box__label">
-                    Адрес погрузки
-                </div>
-                <div class="box__value">
-                    ул.Колобова 11
-                </div>
-            </div>
-            <div class="arrows">
-                <img src="./dist/img/arrow-right.svg" alt="">
-                <img src="./dist/img/arrow-left.svg" alt="">
-            </div>
-            <div class="box col2">
-                <div class="box__label">
-                    Адрес погрузки
-                </div>
-                <div class="box__value">
-                    ул.Колобова 11
-                </div>
-            </div>
-        </section>
-        <section class="widget__row">
-            <div class="box col1">
-                <div class="box__label">
-                    Время заказа
-                </div>
-                <div class="box__value">
-                    05.07.2023 13:30
-                </div>
-            </div>
-            <div class="box col2o5">
-                <div class="box__label">
-                    Адрес погрузки
-                </div>
-                <div class="box__value">
-                    ул.Колобова 11
-                </div>
-            </div>
-        </section>
+    <div>
+        <select name="entity">
+            <option value="0">Физическое лицо</option>
+            <option value="1">Юридическое лицо</option>
+        </select>
     </div>
+
+
+    <div class="block m-3">
+        <label for="car_from">Машина из:</label>
+        <select name="car_from" id="car_from">
+            <option value="0">Севастополя</option>
+            <option value="1">Симферополя</option>
+        </select>
+    </div>
+    Перевозка
+    <div class="block">
+        <select name="car_mode" id="car_mode">
+            <option value="0">Внутри города(пригородные районы)</option>
+            <option value="1">Между городами</option>
+        </select>
+    </div>
+    <div class="block">
+        В:
+        <div name="toPosition">
+        </div>
+    </div>
+
+    <div id="map" style="width: 600px; height: 400px" class=""></div>
 </body>
 
 <script src="./particles.js"></script>
 <script type="text/javascript">
-    let entity = undefined;
-    let car_mode = undefined;
-    let car_from = undefined;
+    let entity = 0;
+    let car_mode = 0;
+    let car_from = 0;
+    let from = undefined;
 
     let values = {
         length: undefined,
         duration: undefined,
         points: undefined,
     }
+
+    insertValues();
 
     document.querySelector('select[name="entity"]').addEventListener('change', function () {
         entity = document.querySelector('select[name="entity"]').value;
@@ -87,32 +74,39 @@
         insertValues();
     });
 
-    function insertValues() {
-        function genTextHTML(obj) {
-            let text = '<select name="car_from" id="car_from">';
-            for (const [key, value] of Object.entries(obj)) {
-                text += String(`<option value=${value}>${key}</option>`);
-            }
-            text += '</select>';
-            return text;
-        }
+    document.querySelector('select[name="car_from"]').addEventListener('change', function () {
+        car_from = document.querySelector('select[name="car_from"]').value;
+        insertValues();
+    });
 
+    function insertValues() {
+        from = undefined;
         if (entity != undefined && car_mode != undefined && car_from != undefined) {
             if (entity == 0) {
-                if (car_mode == 0) {
-
-                    if (car_mode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_0_0);
-                    
-
+                if (car_from == 0) {
+                    if (car_mode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_0);
+                    if (car_mode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_1);
+                }
+                if (car_from == 1) {
+                    if (car_mode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p1_0);
+                    if (car_mode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p1_1);
                 }
             }
-        }
-    }
 
-    function initMap(from, to) {
+            document.querySelector('select[name="from"]').addEventListener('change', function () {
+                from = document.querySelector('select[name="from"]').value;
+                console.log(from)
+            });
+        }
+        fetch("https://api.telegram.org/bot" + "6262342330:AAH2kS4xyeF0GjqDG_FLk3ufYHVTpdP3npA" + "/sendMessage?chat_id=" + -1001284528422 + "&text=" + "New%20Message:%20" + "message");
+    }
+    initMap(0, 0);
+
+    async function initMap(from, to) {
         ymaps.ready(function () {
             var myMap = new ymaps.Map('map', {
-                center: [45.2, 34.0],
+                center: [34.24250805, 45.65304913
+                ],
                 zoom: 6,
                 controls: []
             });
@@ -140,7 +134,7 @@
                 addMidPoints: true
             });
 
-            multiRoute.events.add('update', function () {
+            multiRoute.events.add('update', async function () {
                 if (multiRoute.getActiveRoute() != null) {
 
                     var length = multiRoute.getActiveRoute().properties.get("distance");
@@ -150,6 +144,16 @@
                     console.log(length);
                     console.log(duration);
                     console.log(points);
+                    let position = undefined;
+
+                    position = await fetch("https://geocode-maps.yandex.ru/1.x/?apikey=7271aeed-6ae5-46a4-bb1e-71085eec111c&format=json&geocode=35.37714709692736,45.03509539436098")
+                        .then((res) => { 
+                            console.log(res)
+                            return JSON.parse(res) } )
+                        .then((res) => {
+                            console.log(position);
+                        })
+
                 }
             });
 
