@@ -304,89 +304,6 @@
     </div>
 </body>
 
-<script src="./particles.js"></script>
-<script>
-    let entity = 0;
-    let carMode = 0;
-    let carFrom = 0;
-    let from = 800;
-
-    let adressFrom = undefined;
-    let adressTo = undefined;
-    let renttime = 1;
-
-
-    let length = undefined;
-    let duration = undefined;
-    let points = undefined;
-
-    insertValues();
-
-    document.querySelector('select[name="entity"]').addEventListener('change', function () {
-        entity = document.querySelector('select[name="entity"]').value;
-        insertValues();
-    });
-
-    document.querySelector('select[name="carMode"]').addEventListener('change', function () {
-        carMode = document.querySelector('select[name="carMode"]').value;
-        insertValues();
-    });
-
-    document.querySelector('select[name="carFrom"]').addEventListener('change', function () {
-        carFrom = document.querySelector('select[name="carFrom"]').value;
-        insertValues();
-    });
-
-    document.querySelector('#adressFrom').addEventListener('change', function () {
-        adressFrom = document.querySelector('#adressFrom').value;
-        insertValues();
-    });
-
-    document.querySelector('#adressTo').addEventListener('change', function () {
-        adressTo = document.querySelector('#adressTo').value;
-        insertValues();
-    });
-
-    document.querySelector('#renttime').addEventListener('change', function () {
-        renttime = document.querySelector('#renttime').value;
-        insertValues();
-    });
-
-    function insertValues() {
-
-        if (carFrom == 0) {
-            if (carMode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_0);
-            if (carMode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_1);
-        }
-        if (carFrom == 1) {
-            if (carMode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p1_0);
-            if (carMode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p1_1);
-        }
-
-        document.querySelector('select[name="from"]').addEventListener('change', function () {
-            from = document.querySelector('select[name="from"]').value;
-        });
-
-        if (adressFrom != undefined && adressTo != undefined) {
-            initMap('Севастополь', [adressFrom, adressTo])
-        }
-
-    }
-
-    function setPrice() {
-        document.querySelector('#realprice').innerHTML = 'от ' +  calc() + 'p'
-        fetch("https://api.telegram.org/bot" + "6262342330:AAHAMG5SevaYZML2a7AnRdNHUpjAqAlfbn8" + "/sendMessage?chat_id=" + -1001284528422 + "&text=" + "Price" + ' ' +  calc() + 'p');
-    }
-
-    function calc() {
-        let price = 0;
-        price += Number(document.querySelector('select[name="from"]').value);
-        price += Number(length.value) / 1000 * 50
-        console.log(price);
-        return Math.round(price);
-    }
-</script>
-
 <script type="text/javascript">
     let cars = [
         [
@@ -394,19 +311,22 @@
                 'name': "Бортовая Газель",
                 'char': "3 метра, 1.5 тонны",
                 'x': "3.15",
-                'y': "2.0"
+                'y': "2.0", 
+                'price': 1000
             },
             {
                 'name': "Бортовая Газель",
                 'char': "4 метра, 1.5 тонны",
                 'x': "4.20",
-                'y': "2.0"
+                'y': "2.0", 
+                'price': 1200
             },
             {
                 'name': "Бортовая Газель",
                 'char': "5 метра, 1.5 тонны",
                 'x': "5.20",
-                'y': "2.2"
+                'y': "2.2", 
+                'price': 1500
             },
         ],
         [
@@ -414,13 +334,15 @@
                 'name': "Газель Пирамида",
                 'char': "3 метра, 1.5 тонны",
                 'x': "3.15",
-                'y': "1.8"
+                'y': "1.8", 
+                'price': 1200
             },
             {
                 'name': "Газель Пирамида",
                 'char': "4 метра, 1.5 тонны",
                 'x': "4.20",
-                'y': "2.0"
+                'y': "2.0", 
+                'price': 1500
             },
         ],
         [
@@ -428,43 +350,50 @@
                 'name': "Газель фургон",
                 'char': "3 метра, 1.5 тонны",
                 'x': "3.15",
-                'y': "2.0x1.6"
+                'y': "2.0x1.6", 
+                'price': 1000
             },
             {
                 'name': "Газель фургон",
                 'char': "3 метра, 1.5 тонны",
                 'x': "3.15",
-                'y': "1.8x1.8"
+                'y': "1.8x1.8", 
+                'price': 1200
             },
             {
                 'name': "Газель фургон",
                 'char': "3 метра, 1.5 тонны",
                 'x': "3.15",
-                'y': "2.0x2.0"
+                'y': "2.0x2.0", 
+                'price': 1600
             },
             {
                 'name': "Газель фургон",
                 'char': "4 метра, 1.5 тонны",
                 'x': "4.2",
-                'y': "1.9x1.8"
+                'y': "1.9x1.8", 
+                'price': 1750
             },
             {
                 'name': "Газель фургон",
                 'char': "4 метра, 1.5 тонны",
                 'x': "4.2",
-                'y': "2.0x2.0"
+                'y': "2.0x2.0", 
+                'price': 2000
             },
             {
                 'name': "Газель фургон",
                 'char': "4 метра, 1.5 тонны",
                 'x': "4.2",
-                'y': "2.0x2.2"
+                'y': "2.0x2.2", 
+                'price': 2100
             },
             {
                 'name': "Газель фургон",
                 'char': "4 метра, 1.5 тонны",
                 'x': "5.2",
-                'y': "2.2x2.3"
+                'y': "2.2x2.3", 
+                'price': 2200
             },
         ],
         [
@@ -472,7 +401,8 @@
                 'name': "Грузовик",
                 'char': "От 1.5 до 5 тонн",
                 'x': "5.2",
-                'y': "2.2x2.3"
+                'y': "2.2x2.3", 
+                'price': 1500
             },
         ],
         [
@@ -480,7 +410,8 @@
                 'name': "Грузовик",
                 'char': "Свыше 5 тонн",
                 'x': "5.2",
-                'y': "2.2x2.3"
+                'y': "2.2x2.3", 
+                'price': 3000
             },
         ],
     ];
@@ -558,5 +489,8 @@
         mainpage.style.display = 'flex';
     }
 </script>
+
+<script src="./particles.js"></script>
+<script src="./app.js"></script>
 
 </html>
