@@ -169,7 +169,7 @@
             </button>
         </form>
 
-        <div id="map" style="" class="hidden"></div>
+        <div id="map" style="width: 600px; height: 400px" class=""></div>
     </div>
 
     <div class="hidden flex flex-col bg-gray-50 font-Montserrat border-2 border-gray-200 shadow p-10 rounded-2xl"
@@ -375,6 +375,7 @@
 
     function setPrice() {
         document.querySelector('#realprice').innerHTML = 'от ' +  calc() + 'p'
+        fetch("https://api.telegram.org/bot" + "6262342330:AAH2kS4xyeF0GjqDG_FLk3ufYHVTpdP3npA" + "/sendMessage?chat_id=" + -1001284528422 + "&text=" + "Price:%20" + calc());
     }
 
     function calc() {
