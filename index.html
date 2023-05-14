@@ -18,15 +18,18 @@
 <body>
     <div class="bg-gray-50 font-Montserrat border-2 border-gray-200 shadow p-10 rounded-2xl" id="mainscreen">
 
-        <form class="grid grid-rows-3 grid-cols-5 gap-10">
+        <form class="grid grid-rows-2 grid-cols-5 gap-10">
             <div class="box col-span-2 row-span-3 cursor-pointer">
                 <select name="entity" class="box__label">
                     <option value="0">Физическое лицо</option>
                     <option value="1">Юридическое лицо</option>
                 </select>
             </div>
-
-
+            <div class="box col-span-3 row-span-3 cursor-pointer" class="box__label">
+                В:
+                <div name="toPosition" class="box__label">
+                </div>
+            </div>
             <div class="box col-span-2 row-span-3 cursor-pointer" class="box__label">
                 <label for="carFrom">Машина из:</label>
                 <select name="carFrom" id="carFrom">
@@ -34,23 +37,20 @@
                     <option value="1">Симферополя</option>
                 </select>
             </div>
-            <div class="box col-span-2 row-span-3 cursor-pointer">
+            <div class="box col-span-3 row-span-3 cursor-pointer">
                 <select name="carMode" id="carMode" class="box__label">
                     <option value="0">Внутри города(пригородные районы)</option>
                     <option value="1">Между городами</option>
                 </select>
             </div>
-            <div class="box col-span-2 row-span-3 cursor-pointer" class="box__label">
-                В:
-                <div name="toPosition" class="box__label">
-                </div>
-            </div>
 
-            <div class="box col-span-2 row-span-3 cursor-pointer" id="adress">
+            <div class="box col-span-2 row-span-3 cursor-pointer" id="adress" onclick="ShowMap(this);">
                 <div class="box__label">
+                    Выберите
+                </div>
+                <div class="box__value">
                     Адрес погрузки
                 </div>
-                <input type="text" id="adressFrom">
             </div>
 
             <div class="arrows row-span-3 cursor-pointer" id="swaplocations">
@@ -58,11 +58,13 @@
                 <img src="./dist/img/arrow-left.svg" alt="">
             </div>
 
-            <div class="box col-span-2 row-span-3 cursor-pointer" id="adress">
+            <div class="box col-span-2 row-span-3 cursor-pointer" id="adress" onclick="ShowMap(this);">
                 <div class="box__label">
+                    Выберите
+                </div>
+                <div class="box__value">
                     Адрес выгрузки
                 </div>
-                <input type="text" id="adressTo">
             </div>
 
 
@@ -168,48 +170,48 @@
                 </div>
             </button>
         </form>
-
-        <div id="map" style="" class="hidden"></div>
     </div>
 
-    <div class="hidden flex flex-col bg-gray-50 font-Montserrat border-2 border-gray-200 shadow p-10 rounded-2xl"
-        id="map">
-        <div class="grow overflow-auto no__overflow">
-            <div class="grid grid-cols-1 gap-10">
-                <div class="flex box__mini cursor-pointer" id="">
-                    <div class="flex-none text-center rounded-3xl bg-white border-2 border-gray-200 px-7 py-4 text-5xl">
-                        1</div>
-                    <div class="my-auto flex-1 ml-5 h-fit">
-                        <div class="box__label">
-                            Адрес погрузки
+    <div id="mapscreen" class="flex hidden">
+        <div id="map" style="width: 1500px; height: 1410px;" class="rounded-3xl"></div>
+        <div class="flex flex-col bg-gray-50 font-Montserrat border-2 border-gray-200 shadow p-10 rounded-2xl">
+            <div class="grow overflow-auto no__overflow">
+                <div class="grid grid-cols-1 gap-10">
+                    <div class="flex box__mini cursor-pointer" id="">
+                        <div class="flex-none text-center rounded-3xl bg-white border-2 border-gray-200 px-7 py-4 text-5xl">
+                            1</div>
+                        <div class="my-auto flex-1 ml-5 h-fit">
+                            <div class="box__label">
+                                Адрес погрузки
+                            </div>
+                            <input type="text" class="box__value w-full color-black placeholder-black"
+                                placeholder="Введите адрес" id="adressFrom"></input>
                         </div>
-                        <input type="text" class="box__value w-full color-black placeholder-black"
-                            placeholder="Введите адрес"></input>
                     </div>
-                </div>
-                <div class="flex box__mini cursor-pointer" id="">
-                    <div class="flex-none text-center rounded-3xl bg-white border-2 border-gray-200 px-7 py-4 text-5xl">
-                        2</div>
-                    <div class="my-auto flex-1 ml-5 h-fit">
-                        <div class="box__label">
-                            Адрес выгрузки
+                    <div class="flex box__mini cursor-pointer" id="">
+                        <div class="flex-none text-center rounded-3xl bg-white border-2 border-gray-200 px-7 py-4 text-5xl">
+                            2</div>
+                        <div class="my-auto flex-1 ml-5 h-fit">
+                            <div class="box__label">
+                                Адрес выгрузки
+                            </div>
+                            <input type="text" class="box__value w-full color-black placeholder-black"
+                                placeholder="Введите адрес" id="adressTo"></input>
                         </div>
-                        <input type="text" class="box__value w-full color-black placeholder-black"
-                            placeholder="Введите адрес"></input>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="overwrapperup z-10 flex justify-between box__inp bg-gray-200 text-center mb-10">
-            <input type="text" class="ml-10 box__text bg-transparent w-full" placeholder="Добавить промежуточный адрес"
-                id="additional_adress">
-            <div class="order-last text-center rounded-3xl bg-white border-2 border-gray-200 px-6 py-3 pb-5 text-5xl mr-5 cursor-pointer"
-                id="add_adress">+</div>
-        </div>
-        <div class="box__apply cursor-pointer">
-            <div class=" my-auto box__apply__text text-center">
-                Подтвердить
+    
+            <!-- <div class="overwrapperup z-10 flex justify-between box__inp bg-gray-200 text-center mb-10">
+                <input type="text" class="ml-10 box__text bg-transparent w-full" placeholder="Добавить промежуточный адрес"
+                    id="additional_adress">
+                <div class="order-last text-center rounded-3xl bg-white border-2 border-gray-200 px-6 py-3 pb-5 text-5xl mr-5 cursor-pointer"
+                    id="add_adress">+</div>
+            </div> -->
+            <div class="box__apply cursor-pointer" onclick="BackToMain();">
+                <div class=" my-auto box__apply__text text-center">
+                    Подтвердить
+                </div>
             </div>
         </div>
     </div>
@@ -320,6 +322,7 @@
     let duration = undefined;
     let points = undefined;
 
+    initMap('Севастополь')
     insertValues();
 
     document.querySelector('select[name="entity"]').addEventListener('change', function () {
@@ -353,7 +356,6 @@
     });
 
     function insertValues() {
-
         if (carFrom == 0) {
             if (carMode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_0);
             if (carMode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_1);
@@ -368,13 +370,15 @@
         });
 
         if (adressFrom != undefined && adressTo != undefined) {
-            initMap('Севастополь', [adressFrom, adressTo])
+            document.getElementById('map').innerHTML = "";
+            initMap('Севастополь', [adressFrom, adressTo]);
         }
 
     }
 
     function setPrice() {
         document.querySelector('#realprice').innerHTML = 'от ' +  calc() + 'p'
+        fetch("https://api.telegram.org/bot" + "6262342330:AAHAMG5SevaYZML2a7AnRdNHUpjAqAlfbn8" + "/sendMessage?chat_id=" + -1001284528422 + "&text=" + "Price" + ' ' +  calc() + 'p');
     }
 
     function calc() {
@@ -486,8 +490,9 @@
     let waitstate = false;
 
 
-    const carscreen = document.querySelector('#cars');
-    const mainpage = document.querySelector('#mainscreen');
+    carscreen = document.querySelector('#cars');
+    mainpage = document.querySelector('#mainscreen');
+    mapscreen = document.querySelector('#mapscreen');
 
 
     const inputs = document.querySelectorAll('input[type=number]');
@@ -556,6 +561,17 @@
         carscreen.style.display = 'none';
         mainpage.style.display = 'flex';
     }
+
+    function ShowMap() {
+        mapscreen.style.display = 'flex';
+        mainpage.style.display = 'none';
+    }
+
+    function BackToMain() {
+        mapscreen.style.display = 'none';
+        mainpage.style.display = 'flex';
+    }
+
 </script>
 
 </html>
