@@ -530,12 +530,7 @@ video {
   display: block;
 }
 
-.hidden {
-  display: none;
-}
-
 body {
-  display: flex;
   justify-content: center;
   align-items: center;
   margin: 1em;

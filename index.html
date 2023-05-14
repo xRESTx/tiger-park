@@ -22,15 +22,15 @@
 
 
     <div class="block m-3">
-        <label for="car_from">Машина из:</label>
-        <select name="car_from" id="car_from">
+        <label for="carFrom">Машина из:</label>
+        <select name="carFrom" id="carFrom">
             <option value="0">Севастополя</option>
             <option value="1">Симферополя</option>
         </select>
     </div>
     Перевозка
     <div class="block">
-        <select name="car_mode" id="car_mode">
+        <select name="carMode" id="carMode">
             <option value="0">Внутри города(пригородные районы)</option>
             <option value="1">Между городами</option>
         </select>
@@ -47,15 +47,13 @@
 <script src="./particles.js"></script>
 <script type="text/javascript">
     let entity = 0;
-    let car_mode = 0;
-    let car_from = 0;
+    let carMode = 0;
+    let carFrom = 0;
     let from = undefined;
 
-    let values = {
-        length: undefined,
-        duration: undefined,
-        points: undefined,
-    }
+    let length = undefined;
+    let duration = undefined;
+    let points = undefined;
 
     insertValues();
 
@@ -64,101 +62,113 @@
         insertValues();
     });
 
-    document.querySelector('select[name="car_mode"]').addEventListener('change', function () {
-        car_mode = document.querySelector('select[name="car_mode"]').value;
+    document.querySelector('select[name="carMode"]').addEventListener('change', function () {
+        carMode = document.querySelector('select[name="carMode"]').value;
         insertValues();
     });
 
-    document.querySelector('select[name="car_from"]').addEventListener('change', function () {
-        car_from = document.querySelector('select[name="car_from"]').value;
+    document.querySelector('select[name="carFrom"]').addEventListener('change', function () {
+        carFrom = document.querySelector('select[name="carFrom"]').value;
         insertValues();
     });
 
-    document.querySelector('select[name="car_from"]').addEventListener('change', function () {
-        car_from = document.querySelector('select[name="car_from"]').value;
+    document.querySelector('select[name="carFrom"]').addEventListener('change', function () {
+        carFrom = document.querySelector('select[name="carFrom"]').value;
         insertValues();
     });
 
     function insertValues() {
         from = undefined;
-        if (entity != undefined && car_mode != undefined && car_from != undefined) {
+        document.getElementById("map").innerHTML = "";
+        if (entity != undefined && carMode != undefined && carFrom != undefined) {
             if (entity == 0) {
-                if (car_from == 0) {
-                    if (car_mode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_0);
-                    if (car_mode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_1);
+                if (carFrom == 0) {
+                    if (carMode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_0);
+                    if (carMode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_1);
                 }
-                if (car_from == 1) {
-                    if (car_mode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p1_0);
-                    if (car_mode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p1_1);
+                if (carFrom == 1) {
+                    if (carMode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p1_0);
+                    if (carMode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p1_1);
                 }
             }
 
             document.querySelector('select[name="from"]').addEventListener('change', function () {
+                document.getElementById("map").innerHTML = "";
                 from = document.querySelector('select[name="from"]').value;
-                console.log(from)
+                startProc();
             });
         }
-        fetch("https://api.telegram.org/bot" + "6262342330:AAH2kS4xyeF0GjqDG_FLk3ufYHVTpdP3npA" + "/sendMessage?chat_id=" + -1001284528422 + "&text=" + "New%20Message:%20" + "message");
+        // fetch("https://api.telegram.org/bot" + "6262342330:AAH2kS4xyeF0GjqDG_FLk3ufYHVTpdP3npA" + "/sendMessage?chat_id=" + -1001284528422 + "&text=" + "New%20Message:%20" + "message");
     }
-    initMap(0, 0);
 
-    async function initMap(from, to) {
+    function startProc() {
+        let carFity = 'Севастополь'
+        if (carFrom == 1) car_city = 'Симферополь'
+
+        let fromCity = document.querySelector('select[name="from"]');
+        fromCity = fromCity.options[fromCity.selectedIndex].text;
+
+        initMap(fromCity, [fromCity]);
+    }
+
+    function initMap(centerCity, wayPoints) {
         ymaps.ready(function () {
-            var myMap = new ymaps.Map('map', {
-                center: [34.24250805, 45.65304913
-                ],
-                zoom: 6,
-                controls: []
+            var myMap;
+            ymaps.geocode(centerCity).then(function (res) {
+                myMap = new ymaps.Map('map', {
+                    center: res.geoObjects.get(0).geometry.getCoordinates(),
+                    zoom: 11,
+                    controls: []
+                });
+
+                var searchControl = new ymaps.control.SearchControl({
+                    options: {
+                        provider: 'yandex#search'
+                    }
+                });
+
+                myMap.controls.add(searchControl);
+
+
+                var multiRoute = new ymaps.multiRouter.MultiRoute({
+                    referencePoints: wayPoints
+                }, {
+                    editorDrawOver: false,
+                    editorMidPointsType: "way",
+                    reverseGeocoding: false
+                });
+
+                multiRoute.editor.start({
+                    addWayPoints: true,
+                    removeWayPoints: true,
+                });
+
+                multiRoute.events.add('update', async function () {
+                    if (multiRoute.getActiveRoute() != null) {
+
+                        length = multiRoute.getActiveRoute().properties.get("distance");
+                        duration = multiRoute.getActiveRoute().properties.get('duration');
+                        points = multiRoute.getWayPoints().toArray();
+
+                        console.log(length);
+                        console.log(duration);
+
+                        let position = undefined;
+                        calc();
+                    }
+                });
+
+                myMap.geoObjects.add(multiRoute);
             });
-
-            var searchControl = new ymaps.control.SearchControl({
-                options: {
-                    provider: 'yandex#search'
-                }
-            });
-
-            myMap.controls.add(searchControl);
-
-
-            var multiRoute = new ymaps.multiRouter.MultiRoute({
-                referencePoints: [from, to]
-            }, {
-                editorDrawOver: false,
-                editorMidPointsType: "way",
-                reverseGeocoding: false
-            });
-
-            multiRoute.editor.start({
-                addWayPoints: true,
-                removeWayPoints: true,
-                addMidPoints: true
-            });
-
-            multiRoute.events.add('update', async function () {
-                if (multiRoute.getActiveRoute() != null) {
-
-                    var length = multiRoute.getActiveRoute().properties.get("distance");
-                    var duration = multiRoute.getActiveRoute().properties.get('duration');
-                    var points = multiRoute.getWayPoints().toArray();
-
-                    console.log(length);
-                    console.log(duration);
-                    console.log(points);
-                    let position = undefined;
-
-                    position = await fetch("https://geocode-maps.yandex.ru/1.x/?apikey=7271aeed-6ae5-46a4-bb1e-71085eec111c&format=json&geocode=35.37714709692736,45.03509539436098")
-                        .then((res) => { 
-                            console.log(res)
-                            return JSON.parse(res) } )
-                        .then((res) => {
-                            console.log(position);
-                        })
-
-                }
-            });
-
-            myMap.geoObjects.add(multiRoute);
         });
+    }
+
+    function calc() {
+        let price = 0;
+        price += Number(from);
+        price += Number(length.value) / 1000 * 50
+        console.log(price);
+        return price;
     }
 </script>
 
