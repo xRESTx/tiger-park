@@ -3,29 +3,18 @@
 @tailwind utilities;
 
 body {
+    transition: 0.3s;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 1em;
 }
 
-.widget {
-    background: #FBFBFB;
-    font-family: 'Montserrat';
-    border: 1px solid #BDBDBD;
-    box-shadow: 0px 0px 74px rgba(0, 0, 0, 0.15);
-    border-radius: 43px;
-    width: 711px;
-    height: 1078px;
-    padding: 38px 36px;
-    display: flex;
-    flex-direction: column;
-    gap: 34px;
-}
 
-.widget__row {
-    display: flex;
-    gap: 33px;
+.shadow {
+    box-shadow: 0px 0px 74px rgba(0, 0, 0, 0.15);
+    width: 780px;
+    height: 1155px;
 }
 
 .arrows {
@@ -38,34 +27,162 @@ body {
     background: #FFFFFF;
     border: 1px solid #BDBDBD;
     border-radius: 30px;
-    padding: 26px 28px;
+    padding: 1.5rem 2rem;
+}
+
+.box__mini {
+    background: #F4F4F4;
+    border: 1px solid #BDBDBD;
+    border-radius: 30px;
+    padding: 1rem 1em;
+}
+
+.box:hover {
+    transition: 0.3s;
+    background: #e7e7e7;
+    border: 1px solid #9e9e9e;
+}
+
+.box__apply {
+    background: #000000;
+    border: 1px solid #000000;
+    border-radius: 30px;
+    padding: 1.5rem 2rem;
+}
+
+.box__inp {
+    border: 1px solid #BDBDBD;
+    border-radius: 30px;
+    padding: 1.5rem 0rem;
+}
+
+.box__inp:focus-within {
+    transition: 0.3s;
+    background: #e7e7e7;
+    border: 1px solid #9e9e9e;
+}
+
+.box__price {
+    background: #FFF9D7;
+    border: 1px solid #FFF172;
+    border-radius: 30px;
+    padding: 1.5rem 0rem;
 }
 
 .box__label {
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
     font-weight: 400;
     font-size: 20px;
-    line-height: 24px;
+    line-height: 100%;
     color: #7B7B7B;
 }
 
-.box__value {
+.box__menu__value {
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
     font-weight: 500;
     font-size: 24px;
-    line-height: 29px;
+    color: #000000;
+    text-decoration: underline;
+}
+
+.box__menu__label {
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    font-weight: 400;
+    font-size: 24px;
+    color: #7B7B7B;
+}
+
+.box__text {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 100%;
+    color: #7B7B7B;
+}
+
+.box__apply__text {
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 100%;
+    color: #ffffff;
+}
+
+.box__price__label {
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 100%;
+    color: #DCC497;
+}
+
+.box__price__value {
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 100%;
     color: #000000;
 }
 
-.col1 {
-    width: 268px;
+.box__value {
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 100%;
+    color: #000000;
 }
 
-.col1o5 {
-    width: 331px;
+.overwrapperup {
+    box-shadow: 0px -35px 25px 20px rgb(249, 250, 251);
 }
 
-.col2 {
-    width: 268px;
+.overwrapperdown {
+    box-shadow: 0px 35px 25px 20px rgb(249, 250, 251);
 }
-.col2o5 {
-    width: 334px;
+
+.no__overflow::-webkit-scrollbar {
+    display: none;
+}
+
+.no__overflow {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+*:focus {
+    outline: none;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+input{
+    background-color: transparent;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+input[type=number]::-webkit-inner-spin-button { 
+    /* -webkit-appearance: none; */
+    /* background: url('file:///C:/Users/nikol/Work/Projects/tiger-park/dist/img/Group%2027.svg') no-repeat 50% 50%;   */
+    opacity: 1;
+    z-index: 10;
 }

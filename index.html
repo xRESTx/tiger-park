@@ -12,149 +12,549 @@
     <link href="./dist/output.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="widget">
-        <section class="widget__row">
-            <div class="box col1">
+    <div class="bg-gray-50 font-Montserrat border-2 border-gray-200 shadow p-10 rounded-2xl" id="mainscreen">
+
+        <form class="grid grid-rows-3 grid-cols-5 gap-10">
+            <div class="box col-span-2 row-span-3 cursor-pointer">
+                <select name="entity" class="box__label">
+                    <option value="0">Физическое лицо</option>
+                    <option value="1">Юридическое лицо</option>
+                </select>
+            </div>
+
+
+            <div class="box col-span-2 row-span-3 cursor-pointer" class="box__label">
+                <label for="carFrom">Машина из:</label>
+                <select name="carFrom" id="carFrom">
+                    <option value="0">Севастополя</option>
+                    <option value="1">Симферополя</option>
+                </select>
+            </div>
+            <div class="box col-span-2 row-span-3 cursor-pointer">
+                <select name="carMode" id="carMode" class="box__label">
+                    <option value="0">Внутри города(пригородные районы)</option>
+                    <option value="1">Между городами</option>
+                </select>
+            </div>
+            <div class="box col-span-2 row-span-3 cursor-pointer" class="box__label">
+                В:
+                <div name="toPosition" class="box__label">
+                </div>
+            </div>
+
+            <div class="box col-span-2 row-span-3 cursor-pointer" id="adress">
                 <div class="box__label">
                     Адрес погрузки
                 </div>
-                <div class="box__value">
-                    ул.Колобова 11
-                </div>
+                <input type="text" id="adressFrom">
             </div>
-            <div class="arrows">
+
+            <div class="arrows row-span-3 cursor-pointer" id="swaplocations">
                 <img src="./dist/img/arrow-right.svg" alt="">
                 <img src="./dist/img/arrow-left.svg" alt="">
             </div>
-            <div class="box col2">
+
+            <div class="box col-span-2 row-span-3 cursor-pointer" id="adress">
                 <div class="box__label">
-                    Адрес погрузки
+                    Адрес выгрузки
                 </div>
-                <div class="box__value">
-                    ул.Колобова 11
+                <input type="text" id="adressTo">
+            </div>
+
+
+            <div class="box col-span-3 row-span-3 cursor-pointer">
+                <label for="orderdate">
+                    <div class="box__label">
+                        Выберите
+                    </div>
+                    <div class="box__value">
+                        Дату заказа
+                    </div>
+                </label>
+                <input type="datetime-local" class="" name="orderdate" id="orderdate">
+            </div>
+            <div class="box row-span-5 col-span-2 cursor-pointer" onclick="CarScreen();">
+                <img src="./dist/img/3.png" alt="" id="carimage">
+                <div class="box__label" id="cardata1">
+                    Выберите
+                </div>
+                <div class="box__value" id="cardata2">
+                    Транспорт
+                </div>
+                <input type="number" class="hidden" name="vehicles" id="vehicles">
+            </div>
+            <div class="box col-span-3 row-span-2 cursor-pointer">
+                <div class="box__text text-center" onclick="ChangeWaitState(this)">
+                    Мне не срочно
+                </div>
+                <input type="boolean" class="hidden" name="islotoftime" id="islotoftime">
+            </div>
+            <div class="box col-span-3 row-span-2">
+                <label for="workersnum" type="number" class="box__value inline-block my-auto">
+                    Кол-во грузчиков:
+                </label>
+                <input class="text-xl float-right inline-block w-9" type="number" name="workersnum" id="workersnum"
+                    value="0" min="0" max="9">
+            </div>
+            <div class="box col-span-2 row-span-2 cursor-pointer" id="onlyworkers">
+                <div class="box__text text-center">
+                    Только грузчики
+                </div>
+                <input type="boolean" class="hidden" name="onlyworkers">
+            </div>
+            <div class="box col-span-3 row-span-3">
+                <label for="renttime" class="inline-block">
+                    <div class="box__value">
+                        Время Аренды
+                    </div>
+                    <div class="box__label">
+                        Минимум 1 час
+                    </div>
+                </label>
+                <input class="text-xl float-right inline-block w-14 h-full" type="number" name="renttime" id="renttime"
+                    value="1.0" min="1" max="99" step="0.5">
+            </div>
+            <div class="box col-span-2 row-span-3 cursor-pointer">
+                <div>
+                    <div class="box__label">
+                        Выберите
+                    </div>
+                    <div class="box__value">
+                        Опции к заказу
+                    </div>
                 </div>
             </div>
-        </section>
-        <section class="widget__row">
-            <div class="box col1">
-                <div class="box__label">
-                    Время заказа
+            <div class="box__inp col-span-3 row-span-2 bg-white">
+                <input type="tel" class="box__text text-center w-full bg-transparent" placeholder="+7(___)___-__-__"
+                    name="phone">
+            </div>
+            <div class="box__inp col-span-2 row-span-2 bg-white text-center">
+                <input type="text" class="box__text text-center w-48 bg-transparent" placeholder="Введите имя"
+                    name="name">
+            </div>
+            <div class="box col-span-3 row-span-3 cursor-pointer">
+                <div>
+                    <div class="box__label">
+                        Выберите
+                    </div>
+                    <div class="box__value">
+                        Способ оплаты
+                    </div>
                 </div>
-                <div class="box__value">
-                    05.07.2023 13:30
+                <input type="number" class="hidden" name="payment_option">
+            </div>
+            <div class="grid grid-cols-1 crid-rows-5 col-span-2 row-span-5 gap-10">
+                <div class="box__inp col-span-2 row-span-2 bg-gray-200 text-center">
+                    <input type="text" class="box__text text-center w-48 bg-transparent" placeholder="Промокод">
+                </div>
+                <div class="box__price col-span-2 row-span-3 text-center">
+                    <div>
+                        <div class="box__price__label" id="previousprice">
+                            <s>1200р</s>
+                        </div>
+                        <div class="box__price__value" id="realprice">
+                            1000р
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="box col2o5">
-                <div class="box__label">
-                    Адрес погрузки
+            <button type="submit" class="box__apply col-span-3 row-span-2 cursor-pointer">
+                <div class="box__apply__text text-center">
+                    Заказать
                 </div>
-                <div class="box__value">
-                    ул.Колобова 11
+            </button>
+        </form>
+
+        <div id="map" style="" class="hidden"></div>
+    </div>
+
+    <div class="hidden flex flex-col bg-gray-50 font-Montserrat border-2 border-gray-200 shadow p-10 rounded-2xl"
+        id="map">
+        <div class="grow overflow-auto no__overflow">
+            <div class="grid grid-cols-1 gap-10">
+                <div class="flex box__mini cursor-pointer" id="">
+                    <div class="flex-none text-center rounded-3xl bg-white border-2 border-gray-200 px-7 py-4 text-5xl">
+                        1</div>
+                    <div class="my-auto flex-1 ml-5 h-fit">
+                        <div class="box__label">
+                            Адрес погрузки
+                        </div>
+                        <input type="text" class="box__value w-full color-black placeholder-black"
+                            placeholder="Введите адрес"></input>
+                    </div>
+                </div>
+                <div class="flex box__mini cursor-pointer" id="">
+                    <div class="flex-none text-center rounded-3xl bg-white border-2 border-gray-200 px-7 py-4 text-5xl">
+                        2</div>
+                    <div class="my-auto flex-1 ml-5 h-fit">
+                        <div class="box__label">
+                            Адрес выгрузки
+                        </div>
+                        <input type="text" class="box__value w-full color-black placeholder-black"
+                            placeholder="Введите адрес"></input>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+
+        <div class="overwrapperup z-10 flex justify-between box__inp bg-gray-200 text-center mb-10">
+            <input type="text" class="ml-10 box__text bg-transparent w-full" placeholder="Добавить промежуточный адрес"
+                id="additional_adress">
+            <div class="order-last text-center rounded-3xl bg-white border-2 border-gray-200 px-6 py-3 pb-5 text-5xl mr-5 cursor-pointer"
+                id="add_adress">+</div>
+        </div>
+        <div class="box__apply cursor-pointer">
+            <div class=" my-auto box__apply__text text-center">
+                Подтвердить
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden flex flex-col bg-gray-50 font-Montserrat border-2 border-gray-200 shadow p-10 rounded-2xl"
+        id="cars">
+        <div
+            class="shrink-0 rounded-3xl bg-white border-2 border-gray-400 mb-10 flex px-5 gap-10 overflow-x-scroll h-12 overflow-y-hidden no__overflow">
+            <div class="box__menu__value whitespace-nowrap cursor-pointer" id="1" onclick="Choosecar(this);">
+                Боротовая
+            </div>
+            <div class="box__menu__label underline cursor-pointer whitespace-nowrap" id="2" onclick="Choosecar(this);">
+                Пирамида
+            </div>
+            <div class="box__menu__label cursor-pointer whitespace-nowrap" id="3" onclick="Choosecar(this);">
+                Фургон
+            </div>
+            <div class="box__menu__label cursor-pointer whitespace-nowrap" id="4" onclick="Choosecar(this);">
+                Грузовик свыше 1.5т
+            </div>
+            <div class="box__menu__label cursor-pointer whitespace-nowrap" id="5" onclick="Choosecar(this);">
+                Грузовик свыше 5т
+            </div>
+        </div>
+        <div class="grow overflow-auto no__overflow">
+            <div class="grid grid-cols-1 gap-10 carCreatePoint">
+                <div class="flex box cursor-pointer" id="" onclick="ChosenCar(this);">
+                    <img src="./dist/img/1.png" alt="" class="flex-none max-h-32">
+                    <div class="my-auto flex-1 ml-5 h-fit">
+                        <div class="box__value w-full" id="carname">
+                            Боротовая Газель
+                        </div>
+                        <div class="box__label" id="carchar">
+                            3 метра, 1.5 тонны
+                        </div>
+                    </div>
+                    <div class="order-last grid grid grid-cols-2 grid-rows-2 gap-5">
+                        <img src="./dist/img/ArrowH.svg" alt="" class="text-center m-auto">
+                        <div class="my-auto">
+                            <div class="box__label h-fit">3.15м</div>
+                        </div>
+                        <img src="./dist/img/ArrowV.svg" alt="" class="text-center m-auto">
+                        <div class="my-auto">
+                            <div class="box__label h-fit">2.0м</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex box cursor-pointer" id="" onclick="ChosenCar(this);">
+                    <img src="./dist/img/1.png" alt="" class="flex-none max-h-32">
+                    <div class="my-auto flex-1 ml-5 h-fit">
+                        <div class="box__value w-full" id="carname">
+                            Боротовая Газель
+                        </div>
+                        <div class="box__label" id="carchar">
+                            4 метра, 1.5 тонны
+                        </div>
+                    </div>
+                    <div class="order-last grid grid grid-cols-2 grid-rows-2 gap-5">
+                        <img src="./dist/img/ArrowH.svg" alt="" class="text-center m-auto">
+                        <div class="my-auto">
+                            <div class="box__label h-fit">4.20м</div>
+                        </div>
+                        <img src="./dist/img/ArrowV.svg" alt="" class="text-center m-auto">
+                        <div class="my-auto">
+                            <div class="box__label h-fit">2.0м</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex box cursor-pointer" onclick="ChosenCar(this);" id="">
+                    <img src="./dist/img/1.png" alt="" class="flex-none max-h-32">
+                    <div class="my-auto flex-1 ml-5 h-fit">
+                        <div class="box__value w-full" id="carname">
+                            Боротовая Газель
+                        </div>
+                        <div class="box__label" id="carchar">
+                            5 метров, 1.5 тонны
+                        </div>
+                    </div>
+                    <div class="order-last grid grid grid-cols-2 grid-rows-2 gap-5">
+                        <img src="./dist/img/ArrowH.svg" alt="" class="text-center m-auto">
+                        <div class="my-auto">
+                            <div class="box__label h-fit">5.20м</div>
+                        </div>
+                        <img src="./dist/img/ArrowV.svg" alt="" class="text-center m-auto">
+                        <div class="my-auto">
+                            <div class="box__label h-fit">2.2м</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
 <script src="./particles.js"></script>
-<script type="text/javascript">
-    let entity = undefined;
-    let car_mode = undefined;
-    let car_from = undefined;
+<script>
+    let entity = 0;
+    let carMode = 0;
+    let carFrom = 0;
+    let from = 800;
 
-    let values = {
-        length: undefined,
-        duration: undefined,
-        points: undefined,
-    }
+    let adressFrom = undefined;
+    let adressTo = undefined;
+    let renttime = 1;
+
+
+    let length = undefined;
+    let duration = undefined;
+    let points = undefined;
+
+    insertValues();
 
     document.querySelector('select[name="entity"]').addEventListener('change', function () {
         entity = document.querySelector('select[name="entity"]').value;
         insertValues();
     });
 
-    document.querySelector('select[name="car_mode"]').addEventListener('change', function () {
-        car_mode = document.querySelector('select[name="car_mode"]').value;
+    document.querySelector('select[name="carMode"]').addEventListener('change', function () {
+        carMode = document.querySelector('select[name="carMode"]').value;
         insertValues();
     });
 
-    document.querySelector('select[name="car_from"]').addEventListener('change', function () {
-        car_from = document.querySelector('select[name="car_from"]').value;
+    document.querySelector('select[name="carFrom"]').addEventListener('change', function () {
+        carFrom = document.querySelector('select[name="carFrom"]').value;
+        insertValues();
+    });
+
+    document.querySelector('#adressFrom').addEventListener('change', function () {
+        adressFrom = document.querySelector('#adressFrom').value;
+        insertValues();
+    });
+
+    document.querySelector('#adressTo').addEventListener('change', function () {
+        adressTo = document.querySelector('#adressTo').value;
+        insertValues();
+    });
+
+    document.querySelector('#renttime').addEventListener('change', function () {
+        renttime = document.querySelector('#renttime').value;
         insertValues();
     });
 
     function insertValues() {
-        function genTextHTML(obj) {
-            let text = '<select name="car_from" id="car_from">';
-            for (const [key, value] of Object.entries(obj)) {
-                text += String(`<option value=${value}>${key}</option>`);
-            }
-            text += '</select>';
-            return text;
+
+        if (carFrom == 0) {
+            if (carMode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_0);
+            if (carMode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_1);
+        }
+        if (carFrom == 1) {
+            if (carMode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p1_0);
+            if (carMode == 1) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p1_1);
         }
 
-        if (entity != undefined && car_mode != undefined && car_from != undefined) {
-            if (entity == 0) {
-                if (car_mode == 0) {
+        document.querySelector('select[name="from"]').addEventListener('change', function () {
+            from = document.querySelector('select[name="from"]').value;
+        });
 
-                    if (car_mode == 0) document.querySelector('div[name="toPosition"]').innerHTML = genTextHTML(p0_0_0);
-                    
+        if (adressFrom != undefined && adressTo != undefined) {
+            initMap('Севастополь', [adressFrom, adressTo])
+        }
 
-                }
-            }
+    }
+
+    function setPrice() {
+        document.querySelector('#realprice').innerHTML = 'от ' +  calc() + 'p'
+    }
+
+    function calc() {
+        let price = 0;
+        price += Number(document.querySelector('select[name="from"]').value);
+        price += Number(length.value) / 1000 * 50
+        console.log(price);
+        return Math.round(price);
+    }
+</script>
+
+<script type="text/javascript">
+    let cars = [
+        [
+            {
+                'name': "Бортовая Газель",
+                'char': "3 метра, 1.5 тонны",
+                'x': "3.15",
+                'y': "2.0"
+            },
+            {
+                'name': "Бортовая Газель",
+                'char': "4 метра, 1.5 тонны",
+                'x': "4.20",
+                'y': "2.0"
+            },
+            {
+                'name': "Бортовая Газель",
+                'char': "5 метра, 1.5 тонны",
+                'x': "5.20",
+                'y': "2.2"
+            },
+        ],
+        [
+            {
+                'name': "Газель Пирамида",
+                'char': "3 метра, 1.5 тонны",
+                'x': "3.15",
+                'y': "1.8"
+            },
+            {
+                'name': "Газель Пирамида",
+                'char': "4 метра, 1.5 тонны",
+                'x': "4.20",
+                'y': "2.0"
+            },
+        ],
+        [
+            {
+                'name': "Газель фургон",
+                'char': "3 метра, 1.5 тонны",
+                'x': "3.15",
+                'y': "2.0x1.6"
+            },
+            {
+                'name': "Газель фургон",
+                'char': "3 метра, 1.5 тонны",
+                'x': "3.15",
+                'y': "1.8x1.8"
+            },
+            {
+                'name': "Газель фургон",
+                'char': "3 метра, 1.5 тонны",
+                'x': "3.15",
+                'y': "2.0x2.0"
+            },
+            {
+                'name': "Газель фургон",
+                'char': "4 метра, 1.5 тонны",
+                'x': "4.2",
+                'y': "1.9x1.8"
+            },
+            {
+                'name': "Газель фургон",
+                'char': "4 метра, 1.5 тонны",
+                'x': "4.2",
+                'y': "2.0x2.0"
+            },
+            {
+                'name': "Газель фургон",
+                'char': "4 метра, 1.5 тонны",
+                'x': "4.2",
+                'y': "2.0x2.2"
+            },
+            {
+                'name': "Газель фургон",
+                'char': "4 метра, 1.5 тонны",
+                'x': "5.2",
+                'y': "2.2x2.3"
+            },
+        ],
+        [
+            {
+                'name': "Грузовик",
+                'char': "От 1.5 до 5 тонн",
+                'x': "5.2",
+                'y': "2.2x2.3"
+            },
+        ],
+        [
+            {
+                'name': "Грузовик",
+                'char': "Свыше 5 тонн",
+                'x': "5.2",
+                'y': "2.2x2.3"
+            },
+        ],
+    ];
+    let waitstate = false;
+
+
+    const carscreen = document.querySelector('#cars');
+    const mainpage = document.querySelector('#mainscreen');
+
+
+    const inputs = document.querySelectorAll('input[type=number]');
+    Array.from(inputs).forEach(input => {
+        const min = +input.min;
+        const max = +input.max;
+
+        input.addEventListener('input', (e) => {
+            const value = +input.value;
+            if (value > max) { input.value = max }
+            else if (value < min) { input.value = min }
+        })
+    });
+
+    function Choosecar(obj) {
+        currentCategory = document.querySelector(".box__menu__value");
+        currentCategory.className = 'box__menu__label whitespace-nowrap cursor-pointer';
+        obj.className = 'box__menu__value whitespace-nowrap cursor-pointer';
+        console.log(obj.id);
+        carCreatePoint = document.querySelector(".carCreatePoint");
+        carCreatePoint.innerHTML = '';
+        cars[obj.id - 1].forEach(car => {
+            carCreatePoint.innerHTML +=
+                '<div class="flex box cursor-pointer" id="" onclick="ChosenCar(this);">' +
+                '<img src="./dist/img/' + obj.id + '.png" alt="" class="flex-none max-h-32">' +
+                '<div class="my-auto flex-1 ml-5 h-fit">' +
+                '<div class="box__value w-full" id="carname">' +
+                car.name +
+                '</div> <div class="box__label" id="carchar">' + car.char + '</div> </div>' +
+                '<div class="order-last grid grid grid-cols-2 grid-rows-2 gap-5">' +
+                '<img src="./dist/img/ArrowH.svg" alt="" class="text-center m-auto">' +
+                '<div class="my-auto"><div class="box__label h-fit">' + car.x + 'м</div></div>' +
+                '<img src="./dist/img/ArrowV.svg" alt="" class="text-center m-auto">' +
+                '<div class="my-auto"><div class="box__label h-fit">' + car.y + 'м</div></div>' +
+                '</div> </div>';
+        });
+    }
+
+    function ChangeWaitState(but) {
+        inp = document.querySelector("#islotoftime");
+        if (waitstate == false) {
+            but.parentElement.className = 'box__price col-span-3 row-span-2 cursor-pointer';
+            waitstate = true;
+            inp.value = true;
+        }
+        else {
+            but.parentElement.className = 'box col-span-3 row-span-2 cursor-pointer';
+            waitstate = false;
+            inp.value = false;
         }
     }
 
-    function initMap(from, to) {
-        ymaps.ready(function () {
-            var myMap = new ymaps.Map('map', {
-                center: [45.2, 34.0],
-                zoom: 6,
-                controls: []
-            });
+    function CarScreen() {
+        carscreen.style.display = 'flex';
+        mainpage.style.display = 'none';
+    }
 
-            var searchControl = new ymaps.control.SearchControl({
-                options: {
-                    provider: 'yandex#search'
-                }
-            });
-
-            myMap.controls.add(searchControl);
-
-
-            var multiRoute = new ymaps.multiRouter.MultiRoute({
-                referencePoints: [from, to]
-            }, {
-                editorDrawOver: false,
-                editorMidPointsType: "way",
-                reverseGeocoding: false
-            });
-
-            multiRoute.editor.start({
-                addWayPoints: true,
-                removeWayPoints: true,
-                addMidPoints: true
-            });
-
-            multiRoute.events.add('update', function () {
-                if (multiRoute.getActiveRoute() != null) {
-
-                    var length = multiRoute.getActiveRoute().properties.get("distance");
-                    var duration = multiRoute.getActiveRoute().properties.get('duration');
-                    var points = multiRoute.getWayPoints().toArray();
-
-                    console.log(length);
-                    console.log(duration);
-                    console.log(points);
-                }
-            });
-
-            myMap.geoObjects.add(multiRoute);
-        });
+    function ChosenCar(obj) {
+        currentCategory = document.querySelector(".box__menu__value");
+        inp = document.querySelector("#vehicles");
+        carname = obj.querySelector("#carname").innerHTML;
+        carchar = obj.querySelector("#carchar").innerHTML
+        document.querySelector("#cardata1").innerHTML = carchar;
+        document.querySelector("#cardata2").innerHTML = carname;
+        inp.value = [currentCategory.id, carname + " " + carchar];
+        carscreen.style.display = 'none';
+        mainpage.style.display = 'flex';
     }
 </script>
 
