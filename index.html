@@ -17,8 +17,7 @@
 
 <body>
     <div class="bg-gray-50 font-Montserrat border-2 border-gray-200 shadow p-10 rounded-2xl" id="mainscreen">
-
-        <form class="grid grid-rows-2 grid-cols-5 gap-10">
+        <form class="grid grid-rows-2 grid-cols-5 gap-10" id="submitform">
             <div class="box col-span-2 row-span-3 cursor-pointer">
                 <select name="entity" class="box__label">
                     <option value="0">Физическое лицо</option>
@@ -325,6 +324,15 @@
     initMap('Севастополь')
     insertValues();
 
+    document.querySelector("#submitform").addEventListener('submit', (e) => {
+        e.preventDefault();
+        if(adressFrom == null || adressTo == null) {
+            alert("Выберите начальный и конечный пункт доставки");
+        } else {
+            fetch("https://api.telegram.org/bot" + "6262342330:AAHAMG5SevaYZML2a7AnRdNHUpjAqAlfbn8" + "/sendMessage?chat_id=" + -1001284528422 + "&text=" + "Price" + ' ' +  calc() + 'p');
+        }
+    })
+
     document.querySelector('select[name="entity"]').addEventListener('change', function () {
         entity = document.querySelector('select[name="entity"]').value;
         insertValues();
@@ -378,7 +386,6 @@
 
     function setPrice() {
         document.querySelector('#realprice').innerHTML = 'от ' +  calc() + 'p'
-        fetch("https://api.telegram.org/bot" + "6262342330:AAHAMG5SevaYZML2a7AnRdNHUpjAqAlfbn8" + "/sendMessage?chat_id=" + -1001284528422 + "&text=" + "Price" + ' ' +  calc() + 'p');
     }
 
     function calc() {
@@ -551,13 +558,14 @@
     }
 
     function ChosenCar(obj) {
-        currentCategory = document.querySelector(".box__menu__value");
+        currentCategory = document.querySelector(".box__menu__value").id;
         inp = document.querySelector("#vehicles");
         carname = obj.querySelector("#carname").innerHTML;
         carchar = obj.querySelector("#carchar").innerHTML
         document.querySelector("#cardata1").innerHTML = carchar;
         document.querySelector("#cardata2").innerHTML = carname;
-        inp.value = [currentCategory.id, carname + " " + carchar];
+        document.querySelector("#carimage").src = "./dist/img/"+currentCategory+".png"
+        inp.value = [currentCategory, carname + " " + carchar];
         carscreen.style.display = 'none';
         mainpage.style.display = 'flex';
     }
